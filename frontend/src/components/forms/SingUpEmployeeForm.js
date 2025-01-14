@@ -24,7 +24,7 @@ const SingUpEmployeeForm = ({onSubmit}) => {
       };
 
   return (
-    <form onSubmit={handleSubmit} className='form'>
+    <form onSubmit={handleSubmit} className='loginForm'>
       <h2>Registrace do firmy</h2>
         <Input placeholder='Zadejte Vaše jméno...' name='userName' type='text' label='Vaše jméno:' onChange={handleInputChange}/>
         <Input placeholder='Zadejte heslo...' name='userPassword' type='password' label='Heslo' onChange={handleInputChange}/>

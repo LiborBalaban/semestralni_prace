@@ -4,7 +4,7 @@ import curvearrow from '../Images/curve-arrow.png';
 import { useEffect, useState } from 'react';
 import Input from './inputs/input';
 
-const StockInfo = ({date, count, user, supplier, storage, type}) => {
+const StockInfo = ({date, count, user, supplier, position, storage, type}) => {
   const [img, setImg] = useState(null);  // Přidání useState pro obrázek
 
   const arrow = () => {
@@ -44,6 +44,7 @@ const StockInfo = ({date, count, user, supplier, storage, type}) => {
         {img && <img src={img} alt="arrow" />}
         </div>
         <span>{storage}</span>
+        {position && (<span>{position || ''}</span>)}
     </div>
   );
 }

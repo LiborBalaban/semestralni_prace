@@ -13,7 +13,7 @@ const Select = ({ label, data, onSelect, selected }) => {
       <label htmlFor="select">{label}</label>
       <select id="select" onChange={handleChange} value={selected}>
         <option value="">Vyberte možnost</option>
-        {data.map((item) => (
+        {(data || []).map((item) => (
           <option key={item.id} value={item.id}>
             {item.name}
           </option>

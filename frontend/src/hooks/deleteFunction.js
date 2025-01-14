@@ -10,8 +10,8 @@ const useDeleteData = () => {
     setError(null);
     try {
       const response = await axios.delete(url, { withCredentials: true });
-      console.log('Úspěšně smazáno:', response.data.message);
-      alert(response.data.message);
+      console.log('Úspěšně smazáno:', response.message);
+      alert(response.message);
       return response.data;
     } catch (err) {
       console.error('Chyba při odesílání:', err);

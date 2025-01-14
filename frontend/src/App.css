@@ -67,7 +67,7 @@ button:hover{
   width: 25px;
   border-radius: 50%;
   border: 2px solid red;
-  background-color: transparent;
+  background-color: red;
   color: var(--colorWhite);
   font-weight: 900;
   justify-content: center;
@@ -75,7 +75,7 @@ button:hover{
 }
 
 .button:hover{
-  transform: 0.3s;
+  transition: 0.2s ease-in-out;
   background-color: var(--colorBlack);
 }
 
@@ -274,14 +274,19 @@ button:hover{
 
 .item input{
   text-align: center;
-  width: 80px;
-  height: 35px;
+  width: 90px;
+  height: 30px;
   background-color: transparent;
   color: var(--colorWhite);
   border-radius: 5px;
-  border: 2px solid var(--colorBlue);
+  outline: 2px solid var(--colorBlue);
+  border: none;
 }
 
+.item select{
+  height: 30px;
+  width: 90px;
+}
 
 .item span{
   color: var(--colorWhite);
@@ -301,6 +306,7 @@ button:hover{
 .item_icons{
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 15px;
 }
 
@@ -311,8 +317,58 @@ button:hover{
 
 .item_inputs{
   display: flex;
-  justify-content: space-around;
-  flex: 2;
+  justify-content: space-around !important;
+  align-items: center;
+  flex: 3;
+}
+
+.item_inputs div{
+  gap: 0;
+  width: auto;
+}
+/*ALERTBOX*/
+.alertPage{
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.3);
+  position: fixed;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+.alertBox{
+  background-color: var(--colorBlue);
+  min-width: 350px;
+  margin-top: 25px;
+  z-index: 5;
+  padding: 25px;
+  border-radius: 15px;
+  flex-direction: column;
+  align-items: start;
+  gap: 20px;
+  outline: 2px solid var(--colorWhite);
+  align-self: start;
+  justify-self: start;
+}
+.alertBox p{
+  color: var(--colorWhite);
+}
+
+.alertBox button{
+  width: 100px;
+  height: 40px;
+  outline: 2px solid var(--colorWhite);
+  align-self: flex-end;
+  background-color: transparent;
+  color: var(--colorWhite);
+  border: none;
+  font-weight: 600;
+  border-radius: 5px;
+}
+
+.alertBox button:hover{
+  background-color: var(--colorDefault);
+  transition: 0.2s;
 }
 /*PAGE*/
 .page{
@@ -320,6 +376,8 @@ button:hover{
   height: 100%;
   padding: 25px 0px;
   transition: 0.2s;
+  flex-direction: column;
+  gap: 25px;
 }
 
 .page-header{
@@ -339,20 +397,29 @@ button:hover{
 .form{
   width: 100%;
   background-color: var(--colorDefault);
-  border-radius: 10px;
-  gap: 20px;
+  border-radius: 5px;
+  gap: 30px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  padding: 30px 0px;
-
+  align-items: start;
+  padding: 30px 30px;
+  min-width: 370px;
+  height: 100%;
 }
+
+
+
+.form h2{
+  width: 80%;
+  font-size: 20px;
+}
+
 .form-container{
   width: 100%;
   gap: 25px;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
   flex-direction: column;
 }
 .form-block{
@@ -373,11 +440,11 @@ button:hover{
 }
 
 #ImageBox{
-  width: 60%;
+  width: 45%;
 }
 
 .main-image{
-  width: 75%;
+  width: 100%;
   height: 300px;
   border-radius: 5px;
   border: 1px solid var(--colorWhite);
@@ -392,11 +459,25 @@ button:hover{
 .addImage{
   flex-direction: row;
   padding: 5px 0;
+  justify-content:start;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
 }
 
+.Images{
+  width: 100%;
+  align-items: start;
+  justify-content: start;
+  gap: 15px;
+}
 .Images img{
   width: 120px;
   border-radius: 5px;
+}
+
+.Images img:hover{
+  cursor: pointer;
 }
 
 .Images div{
@@ -411,7 +492,7 @@ button:hover{
   width: 100%;
   gap: 10px;
   border-radius: 5px;
-  margin-top: 15px;
+  position: relative;
 }
 
 .table-row{
@@ -463,16 +544,28 @@ button:hover{
     transform: rotate(360deg);
   }
 }
-
+.loginForm{
+  width: 100%;
+  background-color: var(--colorDefault);
+  border-radius: 5px;
+  gap: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 30px;
+  min-width: 350px;
+}
 .LoginDiv{
-  width: 35%;
-  aspect-ratio: 16/15;
+  width: 620px;
+  height: 750px;
   background-color: var(--colorDefault);
   border-radius: 25px;
   flex-direction: column;
   justify-content: center;
   gap: 25px;
   box-shadow: 0px 8px 20px rgba(0,0,0,0.2);
+  border: 2px solid var(--colorBlue);
 }
 .LoginDiv h2{
   font-size: 30px;
@@ -480,6 +573,7 @@ button:hover{
 }
 .LoginDiv p{
   font-size: 16px;
+  color: var(--colorWhite);
 }
 
 .LoginForm{
@@ -490,6 +584,29 @@ button:hover{
 
 .LoginForm span{
   color: var(--colorBlue);
+}
+
+.resetPasswordSpan{
+  align-items: end;
+  justify-content: flex-end;
+  width: 80%;
+  text-align: end;
+}
+
+.resetPasswordSpan span{
+  color: var(--colorBlue);
+}
+
+
+.formLink{
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.formLink:hover{
+  color: var(--colorBlue);
+  transition: 0.2s;
 }
 
 .LoginForm input{
@@ -591,7 +708,7 @@ nav ul li a{
 .menu span{
   height: 2px;
   width: 100%;
-  background-color: var(--colorBlack);
+  background-color: var(--colorBlue);
 }
 
 
@@ -674,7 +791,7 @@ aside ul li span:hover{
   position: absolute;
   background-color: var(--colorGray);
   width: 100%;
-  min-height: 100%;
+  min-height: 100vh;
   z-index: 1;
   padding: 100px 30px 30px 330px;
   display: flex;
@@ -749,6 +866,19 @@ padding: 50px;
   gap: 15px;
 }
 
+/*INFO HEADER -- INFO ABOUT THE PAGE*/
+.InfoHeader{
+  width: 100%;
+  padding: 30px;
+  border-radius: 5px;
+  background-color: var(--colorDefault);
+}
+
+.InfoHeader h2{
+  color: var(--colorWhite);
+  font-size: 23px;
+}
+
 /*HEADER-----------------*/
 .ProductPageNav{
   width: 100%;
@@ -770,7 +900,7 @@ padding: 50px;
 .ProductPageNavTitles{
   justify-content: space-between;
   align-items: center;
-  padding: 0px 10px;
+  padding: 0px 10px 0px 17px;
   width: 100%;
   border-radius: 5px;
   border-bottom: 2px solid var(--colorBlue);
@@ -792,6 +922,8 @@ padding: 50px;
   justify-content: space-between;
   background-color: var(--colorDefault);
   padding: 10px;
+  flex-direction: row;
+  margin-bottom: 15px;
 }
 
 .searchbarInputs{
@@ -799,7 +931,14 @@ padding: 50px;
   gap: 15px;
   align-items: center;
   justify-content: start;
+  flex-wrap: wrap;
+  width: 100%;
 }
+
+.searchbarInputs div{
+  width: auto;
+}
+
 .searchbarHeader input{
   width: 300px;
   border: none;
@@ -909,14 +1048,20 @@ padding: 50px;
   flex-direction: column;
   padding: 30px 0;
   width: 100%;
+  min-height: 100vh;
 }
+
 
 .AddProductPageContainer{
   align-items: start;
   gap: 20px; 
   width: 100%;
+  height: 100%;
 }
 
+.h2{
+  font-size: 20px;
+}
 
 .Stock{
   flex-direction: column;
@@ -958,12 +1103,17 @@ padding: 50px;
   margin-top: 0px;
 }
 .ProductImagesForm input::file-selector-button{
-  background-color: var(--colorBlue);
+  border: 2px solid var(--colorWhite);
   color: var(--colorWhite);
-  width: 130px;
+  background-color: transparent;
+  width: 110px;
   height: 40px;
-  border: none;
   font-weight: 500;
+  border-radius: 5px;
+}
+
+.ProductImagesForm input{
+  width: 200px;
 }
 
 .ProductImagesContainer{
@@ -1146,22 +1296,39 @@ font-weight: 700;
 
 
 /*Positions*/
-.PositionPage{
-  padding: 30px;
-}
+
 .PositionPageHeader{
   width: 100%;
   display: flex;
-  align-items: center;
+  align-items: start;
   height: 100px;
   flex-direction: column;
+  height: 130px;
+  gap: 15px;
+}
+
+.PositionPageHeader input{
+  width: 300px;
+}
+
+.PositionPageHeader select{
+  width: 300px;
+}
+
+.positionDiv{
+  gap: 25px;
+  flex-wrap: wrap;
+}
+
+.positionDiv div{
+  width: auto;
 }
 
 .positiondAdd{
   width: 100%;
   gap: 20px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: end;
 }
 

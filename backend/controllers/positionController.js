@@ -89,6 +89,46 @@ exports.getAllPositions = async(req, res) => {
  };
 
 
+ exports.getPositionByStorage = async(req, res) => {
+    try {
+        let storageId = '';
+        const storageIdURL = req.params.storageId;
+        const userStorageId = req.user.storageId;
+        
+        if(userStorageId){
+          storageId = req.user.storageId;
+        }
+
+        if(storageIdURL){
+            storageId = storageIdURL;
+        }
+        
+        const positions = await prisma.position.findMany({
+            where: {
+                storage: {
+                   id:parseInt(storageId)
+                  },
+                },
+          });
+         
+        if (!positions) {
+            return res.status(404).json({ message: "Pozice nebyly nalezeny." });
+        }
+        
+        return res.json({
+            message: "Úspěšně se nám podařilo získat pozice",
+            documents: positions
+        });
+    } catch (error) {
+        console.error("Chyba při získávání pozic:", error);
+        return res.status(500).json({
+            message: "Bohužel nedošlo k získání pozic",
+            documents: []
+        });
+    }
+ };
+
+
 
 exports.createPosition = async(req, res) => {
     const { positionName, storageId} = req.body;

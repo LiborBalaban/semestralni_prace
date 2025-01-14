@@ -11,6 +11,7 @@ import List from '../components/List';
 import Header from '../components/Header';
 import useDeleteData from '../hooks/deleteFunction';
 
+
 function CategoryPage() {
 
   const { goTo } = useCustomNavigate();

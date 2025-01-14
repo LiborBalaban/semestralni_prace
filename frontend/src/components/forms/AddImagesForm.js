@@ -42,7 +42,7 @@ const AddImagesForm = ({onSubmit, productId}) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className='form addImage flex'>
+    <form onSubmit={handleSubmit} className='addImage flex'>
         <div className='ProductImagesForm flex'>
             <File onChange={handleFileChange}/>
         </div>

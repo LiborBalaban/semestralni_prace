@@ -12,18 +12,18 @@ import Input from '../components/inputs/input';
 import List from '../components/List';
 import Header from '../components/Header';
 import useDeleteData from '../hooks/deleteFunction';
+import { fetchData } from "../hooks/fetchFunction"
 
 const ProductPage = () => {
   const [products, setProducts] = useState([]);
   const [storageId, setStorageId] = useState('');
+  const [filtredProducts, setFiltredProducts] = useState([]);
   const { role } = useUser();
-  const {deleteData} = useDeleteData();
-
+  const { deleteData } = useDeleteData();
   const { goTo } = useCustomNavigate();
+
   const { data: storages } = useData('http://localhost:5000/get-warehouses');
   const { data: all_products, loading: loadingProducts, error: errorProducts } = useData('http://localhost:5000/get-products');
-  const { data: storages_products } = useData(`http://localhost:5000/get-storage-products/${storageId}`);
-  const { data: employee_products } = useData(`http://localhost:5000/get-storage-products`);
 
   // Nastavení výchozích produktů
   useEffect(() => {
@@ -32,18 +32,25 @@ const ProductPage = () => {
     }
   }, [all_products]);
 
-  // Přepnutí produktů na základě výběru skladu
+  // Přepnutí produktů na základě role a skladu
   useEffect(() => {
-    if (role === 4 && employee_products) {
-      setProducts(employee_products);
-    } else if (storageId && storages_products) {
-      setProducts(storages_products);
-    } else if (!storageId && all_products) {
-      setProducts(all_products);
-    }
-  }, [role, storageId, storages_products, all_products]);
+    const loadProducts = async () => {
+      if (role === 4) {
+        // Pro zaměstnance načti produkty bez ohledu na sklad
+        const employee_products = await fetchData('http://localhost:5000/get-storage-products');
+        setProducts(employee_products);
+      } else if (storageId) {
+        // Načti produkty konkrétního skladu
+        const storages_products = await fetchData(`http://localhost:5000/get-storage-products/${storageId}`);
+        setProducts(storages_products);
+      } else if (!storageId && all_products) {
+        // Pokud není sklad vybrán, použij všechny produkty
+        setProducts(all_products);
+      }
+    };
 
-  const [filtredProducts, setFiltredProducts] = useState([]);
+    loadProducts();
+  }, [role, storageId, all_products]);
 
 
  const hadnleFilteredData =(data)=>{

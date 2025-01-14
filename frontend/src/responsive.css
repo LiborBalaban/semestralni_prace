@@ -1,3 +1,18 @@
+@media only screen and (max-width: 1150px){
+  .AddProductPageContainer{
+    flex-wrap: wrap;
+  }
+  .form{
+    height: auto;
+  }
+  #ImageBox{
+    width: 100%;
+  }
+  .main-image{
+    width: 40%;
+    min-width: 300px;
+  }
+}
 @media only screen and (max-width: 1000px) {
     .menu{
       display: flex;
@@ -70,12 +85,21 @@
     .products_icons{
       display: none;
     }
+
+    .page{
+      padding: 15px;
+    }
   
-    aside{
+    .aside{
       display: none;
       flex-direction: column;
       animation: fade 0.3s ease-in-out;
       width: 100%;
+      overflow-y: scroll;
+    }
+
+    .aside::-webkit-scrollbar{
+      display: none;
     }
   
     .deleteProductButton{

@@ -5,8 +5,9 @@ import Select from '../inputs/select';
 import Textarea from '../inputs/textarea';
 import Button from '../button';
 import useData from '../../hooks/loadData';
+import { useUser } from '../../context/UserContext';
 
-const StockForm = ({onSubmit, data}) => {
+const StockForm = ({onSubmit, handleStorage}) => {
     const { data:suppliers} = useData('http://localhost:5000/get-suppliers'); 
     const { data:storages} = useData('http://localhost:5000/get-warehouses'); 
     const [formData, setFormData] = useState({
@@ -15,6 +16,8 @@ const StockForm = ({onSubmit, data}) => {
         stockNumber:'',
         stockStorageId:''
       });
+      console.log("handleStorageId v StockPage:", handleStorage);
+      const { role } = useUser();
       
       const handleInputChange = (name, value) => {
         setFormData((prevData) => ({
@@ -35,16 +38,16 @@ const StockForm = ({onSubmit, data}) => {
           ...prevData,
           stockStorageId: selectedId,
         }));
+        
+        if (handleStorage) {
+          handleStorage(selectedId);  // Tento log zkontroluje, zda je funkce volána
+        } else {
+          console.log("handleStorage je undefined");  // Tento log by měl ukázat, jestli je funkce undefined
+        }
+        
       };
 
-       useEffect(() => {
-              if (data) {
-                setFormData({
-                  categoryName: data.name,
-                  categoryDescription: data.description,
-                });
-              }
-            }, [data]);
+       
 
       const handleSubmit = (e) => {
         e.preventDefault();
@@ -54,7 +57,7 @@ const StockForm = ({onSubmit, data}) => {
   return (
     <form onSubmit={handleSubmit} className='StockForm flex'>
         <Select data={suppliers} label={'Dodavatelé'} onSelect={handleSelectSupplier}/> 
-        <Select data={storages} label={'Sklad'} onSelect={handleSelectStorage}/> 
+        {role === 3 && (<Select data={storages} label={'Sklad'} onSelect={handleSelectStorage}/> )}
         <Textarea label={'Popis'} placeholder={'Popis Naskladnění'} name={'stockDescription'} onChange={handleInputChange}/>
         <Input label={'Číslo dokladu'} type={'number'} name={'stockNumber'} onChange={handleInputChange}/>
         <Button label={'Odeslat'} style={'button addButton'} onChange={handleInputChange}/>

@@ -10,17 +10,27 @@ import Button from '../components/button';
 import Select from '../components/inputs/select';
 import Item from '../components/item';
 import List from '../components/List';
+import AlertBox from '../components/AlertBox';
 
 function PositionPage() {
   const [formData, setFormData] = useState({
     positionName:'',
     storageId:''
   });
+
+  const [alert, setAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState(false);
   //const [positions, savePositions] = useState([]);
 
-const savePosition =()=>{
+const savePosition =async()=>{
   console.log(formData);
-  postData('http://localhost:5000/save-position', formData);
+  const resultMessage = await postData('http://localhost:5000/save-position', formData);
+  setAlert(true);
+  setAlertMessage(resultMessage.message);
+}
+
+const handleVisibility =(visible)=>{
+  setAlert(visible);
 }
 
 const handleInputChange = (name, value) => {
@@ -47,12 +57,15 @@ const handleSelect = (selectedId) => {
   
 
   return (
-    <div className="page PositionPage">
-        <div className='PositionPageHeader'>
+    <div className="page PositionPage flex">
+        {alert && (<AlertBox onClick={handleVisibility} message={alertMessage}/>)}
+        <div className='PositionPageHeader flex'>
         <h2>Pozice skladů</h2>
         <div className='flex positiondAdd'>
+        <div className='flex positionDiv'>
         <Input placeholder={'Zadejte název pozice...'} label={'Přidat pozici'} name={'positionName'} onChange={handleInputChange}/>
         <Select data={storages} label={'Vyberte sklad'} onSelect={handleSelect}/>
+        </div>
         <Button style={'button addButton'} label={'Přidat pozici'} onClick={savePosition}/>
         </div>
         </div>

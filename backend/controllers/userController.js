@@ -174,14 +174,14 @@ exports.loginUser = async(req, res) => {
             });
         
         if (!user) {
-          return res.status(404).json({ message: 'User not found' });
+          return res.status(404).json({ message: 'Uživatel nebyl nalezen' });
         }
         if (user.isActive === false) {
-          return res.status(403).json({ message: 'Account not activated' });
+          return res.status(403).json({ message: 'Účet neni aktivován' });
         }
         const isPasswordValid = await bcrypt.compare(userPassword, user.password);
         if (!isPasswordValid) {
-          return res.status(401).json({ message: 'Invalid password' });
+          return res.status(401).json({ message: 'Špatné heslo' });
         }
     
         const token = jwt.sign({role: user.roleId, id:user.id, company: user.companyId , storage:user.storageId}, process.env.TOKEN, {expiresIn:'24h'});

@@ -85,6 +85,8 @@ model Position {
   categories  Category[] @relation
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  positionProducts PositionProduct[]
+  stockTransaction StockTransaction[]
 }
 
 model ProductImage {
@@ -97,12 +99,23 @@ model ProductImage {
   updatedAt DateTime @updatedAt
 }
 
+model PositionProduct {
+  id         Int       @id @default(autoincrement())
+  productId  Int
+  positionId Int
+  quantity   Int
+
+  product    Product   @relation(fields: [productId], references: [id]) // Relace na tabulku Product
+  position   Position  @relation(fields: [positionId], references: [id]) // Relace na tabulku Position
+
+  @@unique([positionId, productId]) // Unikátní kombinace
+}
 model Product {
   id          Int      @id @default(autoincrement())
   name        String   @db.VarChar(255)
   code        String   @unique @db.VarChar(255)
   description String?  @db.Text
-  quantity    Int      @default(0)
+  quantity    Int?      @default(0)
   category    Category? @relation(fields: [categoryId], references: [id])
   categoryId  Int?     // Cizí klíč odkazující na Category tabulku
   positionId  Int?       // Cizí klíč odkazující na Company tabulku
@@ -114,6 +127,7 @@ model Product {
   stocks            Stock[]            // Vztah k tabulce Stock
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  positionProducts PositionProduct[]
 }
 
 model Storage {
@@ -128,7 +142,7 @@ model Storage {
   companyId  Int       // Cizí klíč odkazující na Company tabulku
   company    Company   @relation(fields: [companyId], references: [id]) // Opačná strana vztahu
   stockMovements StockMovement[]
-  StockTransaction StockTransaction[]
+  stockTransaction StockTransaction[]
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }
@@ -184,7 +198,10 @@ model StockTransaction {
   quantity          Int       // Množství produktu v dané transakci
   price Int
   storageId    Int
+  positionId Int?
+  position   Position? @relation(fields: [positionId], references: [id])
   storage      Storage @relation(fields: [storageId], references: [id])
+ 
 
   movement  StockMovement @relation(fields: [movementId], references: [id])
   product   Product       @relation(fields: [productId], references: [id])

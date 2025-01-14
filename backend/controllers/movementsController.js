@@ -98,6 +98,7 @@ exports.getAllMovements = async (req, res) => {
 exports.getProductStock = async(req, res) => {
     try {
             const productId = req.params.productId;
+           
             if(!productId){
                 return res.json({
                     message: "Chybí produkt ID"
@@ -108,6 +109,11 @@ exports.getProductStock = async(req, res) => {
                   productId: parseInt(productId),
                 },
                 include: {
+                  position:{
+                    select:{
+                      name:true
+                    }
+                  },
                   movement: {
                     include: {
                       user: {
@@ -154,33 +160,34 @@ exports.getProductStock = async(req, res) => {
               }); 
           }
           const product_stocks = await prisma.stockTransaction.findMany({
-              where: {
-                productId: parseInt(productId),
-                storageId: storageId
-              },
-              include: {
-                movement: {
-                  include: {
-                    user: {
-                      select:{
-                        name:true
-                      }
+            where: {
+              productId: parseInt(productId),
+              storageId: storageId,
+            },
+            include: {
+              position:true,
+              movement: {
+                include: {
+                  user: {
+                    select: {
+                      name: true,
                     },
-                    supplier:{
-                      select:{
-                        name:true
-                      }
+                  },
+                  supplier: {
+                    select: {
+                      name: true,
                     },
-                    storage:{
-                      select:{
-                        name:true
-                      }
-                    }
+                  },
+                  storage: {
+                    select: {
+                      name: true,
+                    },
                   },
                 },
-                storage: true,
               },
-            });
+              storage: true,
+            },
+          });
           
           return res.json({
               message: "Úspěšně se nám podařilo získat naskladnění",
@@ -225,7 +232,7 @@ exports.createMovement = async(req, res) => {
           })
   
           const promises = products.map(async (stock) => {
-              const { id, quantity, price } = stock;
+              const { id, quantity, price, positionId } = stock;
   
               const stockTransaction = await prisma.stockTransaction.create({
                 data:{
@@ -233,7 +240,8 @@ exports.createMovement = async(req, res) => {
                     productId: parseInt(id),
                     quantity: parseInt(quantity),
                     price: parseInt(price),
-                    storageId: parseInt(storage)
+                    storageId: parseInt(storage),
+                    positionId: positionId ? parseInt(positionId) : null,
                 }
               })
               
@@ -261,6 +269,46 @@ exports.createMovement = async(req, res) => {
                         quantity: typeMovement === 2 ? -parseInt(quantity) : parseInt(quantity),
                     }
                 })
+              }
+              if (positionId) {
+                const positionStock = await prisma.positionProduct.findFirst({
+                  where: {
+                    productId: parseInt(id),
+                    positionId: parseInt(positionId),
+                  },
+                });
+        
+                if (positionStock) {
+                  // Pokud existuje, aktualizuj množství na pozici
+                  const updatedPositionStock = await prisma.positionProduct.update({
+                    where: { id: positionStock.id },
+                    data: {
+                      quantity: {
+                        increment:
+                          typeMovement === 2
+                            ? -parseInt(quantity)
+                            : parseInt(quantity),
+                      },
+                    },
+                  });
+                  if (updatedPositionStock.quantity <= 0) {
+                    await prisma.positionProduct.delete({
+                      where: { id: updatedPositionStock.id },
+                    });
+                  }
+                } else {
+                  // Pokud neexistuje, vytvoř nový záznam
+                  await prisma.positionProduct.create({
+                    data: {
+                      productId: parseInt(id),
+                      positionId: parseInt(positionId),
+                      quantity:
+                        typeMovement === 2
+                          ? -parseInt(quantity)
+                          : parseInt(quantity),
+                    },
+                  });
+                }
               }
           });
   
